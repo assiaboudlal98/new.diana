@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIANA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="container">
+            <h1>DIANA STORE</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="add-product.html">Add Product</a></li>
+                <!-- <li><a href="#">Contact</a></li> -->
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Add New Product</h2>
+        <form id="addProductForm" enctype="multipart/form-data">
+            <input type="text" id="name" placeholder="Product Name" required><br>
+            <textarea id="description" placeholder="Product Description" required></textarea><br>
+            <input type="number" id="price" placeholder="Price" required><br>
+            <input type="file" id="image" required><br>
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <script>
+        // Add a new product
+        document.getElementById('addProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const price = document.getElementById('price').value;
+            const image = document.getElementById('image').files[0];
+
+            const formData = new FormData();
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('price', price);
+            formData.append('image', image);
+
+            fetch('http://localhost:3000/products', {
+                method: 'POST',
+                credentials: 'include',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                window.location.href = 'index.html'; // Redirect to home page
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
